@@ -79,9 +79,7 @@ json_data = {"name": "admin汉字", "password": "11111111"}
 message = json.dumps(json_data)
 # 公司经理私钥签名
 crypto_email_text = rsa.sign(message, privkey, 'SHA-1')
-print
-crypto_email_text
+print(crypto_email_text)
 
 # 业务员同时收到指令明文、密文，然后用公钥验证，进行身份确认
-print
-rsa.verify(message, crypto_email_text, pubkey)
+print(rsa.verify(message, crypto_email_text, pubkey))
