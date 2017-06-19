@@ -43,6 +43,10 @@ def index():
 
 @app.route('/json' , methods=['GET', 'POST'])
 def post_test():
+    '''
+    验证数据（数字签名）
+    :return:
+    '''
     if request.method == 'POST':
 
         all_data = request.values
@@ -75,6 +79,41 @@ def post_test():
     else:
         return jsonify({"result":"post only"})
 
+
+
+@app.route('/json2' , methods=['GET', 'POST'])
+def post_test2():
+    '''
+    解密数据
+    :return:
+    '''
+    if request.method == 'POST':
+
+        all_data = request.values
+        print(all_data)
+
+        data_sign = request.values.get('data')
+        print(type(data_sign))
+        print(data_sign)
+
+        # 导入私钥
+        with open('private.pem', 'r') as f:
+            privkey = rsa.PrivateKey.load_pkcs1(f.read().encode())
+
+        # 私钥解密
+        data_str = rsa.decrypt(data_sign.encode('iso-8859-15'), privkey).decode('iso-8859-15')
+        print(data_str)
+
+        try:
+            data_dic = json.loads(data_str)
+            name_ = data_dic["name"]
+            return jsonify({"name":name_})
+
+        except:
+            return jsonify({"result":"type error"})
+
+    else:
+        return jsonify({"result":"post only"})
 
 
 @app.route('/file' , methods=['GET', 'POST'])

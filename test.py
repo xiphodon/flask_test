@@ -22,7 +22,7 @@ def post(url,params):
 
 def get_post_args(post_mode=True):
     '''
-    普通参数请求
+    普通参数请求(数字签名)
     :return:
     '''
     # 导入私钥
@@ -52,6 +52,46 @@ def get_post_args(post_mode=True):
         get(url,params)
 
 
+def get_post_args2(post_mode=True):
+    '''
+    普通参数请求(数据加密)
+    :return:
+    '''
+    # 导入公钥
+    with open('public.pem', 'r') as f:
+        pubkey = rsa.PublicKey.load_pkcs1(f.read().encode())
+
+    url = r"http://127.0.0.1:5000/json2"
+
+    # 数据
+    json_data = {"name": "admin汉字", "password": "11111111"}
+    params_data = json.dumps(json_data)
+    print(params_data)
+    print("____________________")
+
+    # 加密，得到密文
+    sign_data_bytes = rsa.encrypt(params_data.encode('iso-8859-15'), pubkey)
+    print(type(sign_data_bytes))
+    print(sign_data_bytes)
+
+    print("******************")
+
+    sign_data_str = sign_data_bytes.decode('iso-8859-15')
+    print(type(sign_data_str))
+    print(sign_data_str)
+
+    params = {"data": sign_data_str}
+    print(params)
+
+    print("===============")
+
+    if(post_mode):
+        post(url, params)
+    else:
+        get(url,params)
+
+
+
 def post_file():
     '''
     上传文件
@@ -73,4 +113,5 @@ def post_file():
 
 if __name__ == "__main__":
     # get_post_args()
-    post_file()
+    get_post_args2()
+    # post_file()
