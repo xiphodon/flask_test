@@ -20,7 +20,7 @@ def post(url,params):
     r = requests.post(url=url, data=params)
     print("post:" + r.text + "\n")
 
-def get_post_args(post_mode=True):
+def get_post_args(url = r"http://127.0.0.1:5000/json",post_mode=True):
     '''
     普通参数请求(数字签名)
     :return:
@@ -30,10 +30,10 @@ def get_post_args(post_mode=True):
         privkey = rsa.PrivateKey.load_pkcs1(f.read().encode())
 
     # url = "http://u.ikuaichuan.com:8080/olms/api/account/login"
-    url = r"http://127.0.0.1:5000/json"
+    # url = r"http://127.0.0.1:5000/json"
 
     # 数据
-    json_data = {"name": "admin汉字", "password": "11111111"}
+    json_data = {"name": "admin汉字123abc", "password": "11111111"}
     params_data = json.dumps(json_data)
 
     # 数据数字签名
@@ -52,7 +52,7 @@ def get_post_args(post_mode=True):
         get(url,params)
 
 
-def get_post_args2(post_mode=True):
+def get_post_args2(url=r"http://127.0.0.1:5000/json2" ,post_mode=True):
     '''
     普通参数请求(数据加密)
     :return:
@@ -61,7 +61,7 @@ def get_post_args2(post_mode=True):
     with open('public.pem', 'r') as f:
         pubkey = rsa.PublicKey.load_pkcs1(f.read().encode())
 
-    url = r"http://127.0.0.1:5000/json2"
+    # url = r"http://127.0.0.1:5000/json2"
 
     # 数据
     json_data = {"name": "admin汉字", "password": "11111111"}
@@ -112,6 +112,7 @@ def post_file():
 
 
 if __name__ == "__main__":
-    # get_post_args()
-    get_post_args2()
+    # get_post_args(url = r"http://10.201.5.45:5000/json")
+    get_post_args2(url = r"http://10.201.5.45:5000/json2")
+    # get_post_args2()
     # post_file()

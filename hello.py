@@ -101,7 +101,7 @@ def post_test2():
             privkey = rsa.PrivateKey.load_pkcs1(f.read().encode())
 
         # 私钥解密
-        data_str = rsa.decrypt(data_sign.encode('iso-8859-15'), privkey).decode('iso-8859-15')
+        data_str = rsa.decrypt(data_sign.encode('iso-8859-15'), privkey).decode('unicode-escape')
         print(data_str)
 
         try:
@@ -109,7 +109,8 @@ def post_test2():
             name_ = data_dic["name"]
             return jsonify({"name":name_})
 
-        except:
+        except Exception as e:
+            print(e)
             return jsonify({"result":"type error"})
 
     else:
@@ -156,5 +157,5 @@ def user(info):
 
 
 if __name__ == '__main__':
-    manager.run()
-    # app.run(debug=True)
+    # manager.run()
+    app.run(debug=True)
